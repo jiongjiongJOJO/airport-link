@@ -44,16 +44,25 @@ async def create_outlook():
                            args=[f'--proxy-server={config_json["proxy"]}'])
     page = await browser.newPage()
     await page.goto('https://signup.live.com/signup')
-    await page.waitForSelector("#iSignupAction")
-    await page.click("#iSignupAction")
+    await page.waitForSelector('#nextButton')
+    await page.click('#nextButton')
+    await asyncio.sleep(1)
+    await page.waitForSelector('#liveSwitch')
+    await page.click('#liveSwitch')
+    await asyncio.sleep(1)
 
-    email = f"F{get_random_string()}@outlook.com"
+    email_name = f'F{get_random_string()}'
+    email = f"{email_name}@outlook.com"
     password = get_random_string(20, True)
 
-    await type_and_click_next(page, "#MemberName", email)
-    await type_and_click_next(page, "#PasswordInput", password)
-    await type_and_click_next(page, "#FirstName", get_random_string())
-    await type_and_click_next(page, "#LastName", get_random_string())
+    await type_and_click_next(page, "#usernameInput", email_name)
+    await asyncio.sleep(1)
+    await type_and_click_next(page, "#Password", password)
+    await asyncio.sleep(1)
+    await type_and_click_next(page, "#lastNameInput", get_random_string())
+    await asyncio.sleep(1)
+    await type_and_click_next(page, "#firstNameInput", get_random_string())
+    await asyncio.sleep(1)
 
     await page.waitForSelector("#BirthMonth")
     await page.click("#BirthMonth")
@@ -66,6 +75,7 @@ async def create_outlook():
     await page.click("#BirthDay")
     await page.keyboard.press('Enter')
     await page.keyboard.press('ArrowDown')
+
     await type_and_click_next(page, "#BirthYear", "2000")
 
     print(f"电子邮件: {email}")
